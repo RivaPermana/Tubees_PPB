@@ -2,6 +2,8 @@
 
 A new Flutter project.
 
+https://docs.google.com/document/u/0/d/1Ln76KnEJjZJdiS5YWaenIc3DWKQA2LxCN-_sfM5goog/mobilebasic
+https://docs.google.com/document/u/0/d/11iqONzX61IzZLz8SXjh_HuRv6wkjbBNw6oQ_WqQhBQk/mobilebasic
 ## Getting Started
 
 This project is a starting point for a Flutter application.
