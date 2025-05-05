@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cleanquest/screens/profile.dart';
 import 'package:cleanquest/screens/reward.dart';
 import 'package:flutter/material.dart';
 import '../models/mission.dart';
@@ -11,7 +12,8 @@ import 'package:image_picker/image_picker.dart';
 class HomeScreen extends StatefulWidget {
   final int userId; // Tambahkan userId sebagai parameter
 
-  HomeScreen({required this.userId}); // Tambahkan konstruktor untuk menerima userId
+  HomeScreen(
+      {required this.userId}); // Tambahkan konstruktor untuk menerima userId
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -22,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late ApiService apiService;
   List<Mission> missions = [];
   int completedMissionsCount = 0;
-  int totalMissionsCount = 0; 
+  int totalMissionsCount = 0;
   bool isLoading = true;
   //int _currentIndex = 0; // Untuk melacak tab yang aktif
   //late List<Widget> _pages; // Daftar halaman
@@ -47,9 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
       final fetchedMissions = await apiService.getMissions();
 
       // Hitung jumlah total misi dan misi yang sudah diselesaikan
-      final completedMissions = fetchedUser.missions
-          .where((mission) => mission.isCompleted)
-          .length;
+      final completedMissions =
+          fetchedUser.missions.where((mission) => mission.isCompleted).length;
 
       setState(() {
         user = fetchedUser;
@@ -65,15 +66,17 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
   }
-  
+
   Future<void> _toggleMissionStatus(String missionId) async {
     setState(() => isLoading = true);
 
-    final userMission = user.missions.firstWhere((m) => m.missionId == missionId);
+    final userMission =
+        user.missions.firstWhere((m) => m.missionId == missionId);
     final newStatus = !userMission.isCompleted;
 
     try {
-      await apiService.updateMissionStatus(int.parse(userMission.missionId), newStatus);
+      await apiService.updateMissionStatus(
+          int.parse(userMission.missionId), newStatus);
       setState(() {
         userMission.isCompleted = newStatus;
 
@@ -87,8 +90,10 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() => isLoading = false);
     }
   }
+
   void _showSubmitDialog(BuildContext context, String missionId) {
-    final BuildContext parentContext = context; // Simpan context sebelum dialog dibuka
+    final BuildContext parentContext =
+        context; // Simpan context sebelum dialog dibuka
     var userId = widget.userId;
     showDialog(
       context: context,
@@ -110,34 +115,34 @@ class _HomeScreenState extends State<HomeScreen> {
               if (video != null) {
                 // Kirim video ke API
                 try {
-                // Kirim video ke API
-                await apiService.submitMissionProof(
-                  userId: userId,
-                  missionId: int.parse(missionId),
-                  videoFile: File(video.path),
-                );
+                  // Kirim video ke API
+                  await apiService.submitMissionProof(
+                    userId: userId,
+                    missionId: int.parse(missionId),
+                    videoFile: File(video.path),
+                  );
 
-                // Tampilkan Snackbar setelah submit berhasil
-                ScaffoldMessenger.of(parentContext).showSnackBar(
-                  SnackBar(
-                    content: Text('Bukti misi berhasil disubmit!'),
-                    duration: Duration(seconds: 3),
-                    backgroundColor: Colors.green,
-                  ),
-                );
+                  // Tampilkan Snackbar setelah submit berhasil
+                  ScaffoldMessenger.of(parentContext).showSnackBar(
+                    SnackBar(
+                      content: Text('Bukti misi berhasil disubmit!'),
+                      duration: Duration(seconds: 3),
+                      backgroundColor: const Color.fromRGBO(76, 175, 80, 1),
+                    ),
+                  );
 
-                // Refresh state setelah submit
-                setState(() {});
-              } catch (e) {
-                // Tampilkan Snackbar jika terjadi kesalahan
-                ScaffoldMessenger.of(parentContext).showSnackBar(
-                  SnackBar(
-                    content: Text('Gagal mengirim bukti misi. Coba lagi!'),
-                    duration: Duration(seconds: 3),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              }
+                  // Refresh state setelah submit
+                  setState(() {});
+                } catch (e) {
+                  // Tampilkan Snackbar jika terjadi kesalahan
+                  ScaffoldMessenger.of(parentContext).showSnackBar(
+                    SnackBar(
+                      content: Text('Gagal mengirim bukti misi. Coba lagi!'),
+                      duration: Duration(seconds: 3),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
               }
             },
             child: Text('Submit'),
@@ -277,7 +282,8 @@ class _HomeScreenState extends State<HomeScreen> {
       itemCount: missions.length,
       itemBuilder: (context, index) {
         final mission = missions[index];
-        final userMission = user.missions.firstWhere((m) => m.missionId == mission.id);
+        final userMission =
+            user.missions.firstWhere((m) => m.missionId == mission.id);
         return _buildMissionCard(mission, userMission);
       },
     );
@@ -338,7 +344,8 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: Colors.teal,
-                borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
+                borderRadius:
+                    BorderRadius.vertical(bottom: Radius.circular(16)),
               ),
               child: Row(
                 children: [
@@ -379,21 +386,22 @@ class _HomeScreenState extends State<HomeScreen> {
       onTap: (index) {
         if (index == 0) {
           // Pindah ke halaman Home
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => HomeScreen(userId: user.id)),
+            MaterialPageRoute(
+                builder: (context) => HomeScreen(userId: user.id)),
           );
-        /*} else if (index == 2) {
-          // Pindah ke halaman Profile
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ProfileScreen(userId: user.id)),
-          );*/
         } else if (index == 1) {
           // Pindah ke halaman Reward
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => RewardScreen()),
+            MaterialPageRoute(builder: (context) => RewardScreen(userId: user.id,)),
+          );
+        } else if (index == 2) {
+          // Pindah ke halaman Profile
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => ProfileScreen(userId: user.id,)),
           );
         }
       },
@@ -412,6 +420,5 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ],
     );
-    
   }
 }

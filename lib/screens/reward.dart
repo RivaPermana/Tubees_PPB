@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'home_page.dart'; // Pastikan HomeScreen diimport dengan benar
+import 'profile.dart'; // Pastikan ProfileScreen diimport dengan benar
 import 'cash_tab.dart';
 import 'voucher_tab.dart';
 
 class RewardScreen extends StatefulWidget {
+  final int userId; // Tambahkan userId sebagai parameter
+  
+  // Konstruktor untuk menerima userId
+  RewardScreen({required this.userId});
+
   @override
   _RewardScreenState createState() => _RewardScreenState();
 }
@@ -15,6 +22,53 @@ class _RewardScreenState extends State<RewardScreen> {
   void dispose() {
     _customAmountController.dispose();
     super.dispose();
+  }
+
+  // Function to build the Bottom Navigation Bar
+  Widget _buildBottomNavBar() {
+    return BottomNavigationBar(
+      currentIndex: _currentIndex, // Set the current index
+      onTap: (index) {
+        setState(() {
+          _currentIndex = index; // Update the index when a tab is clicked
+        });
+
+        if (index == 0) {
+          // Navigate to HomeScreen
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => HomeScreen(userId: widget.userId)), // Menggunakan widget.userId
+          );
+        } else if (index == 1) {
+          // Stay on the current RewardScreen
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => RewardScreen(userId: widget.userId)),
+          );
+        } else if (index == 2) {
+          // Navigate to ProfileScreen
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => ProfileScreen(userId: widget.userId)), // Menggunakan widget.userId
+          );
+        }
+      },
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'Home',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.card_giftcard),
+          label: 'Reward',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+          label: 'Profile',
+        ),
+      ],
+    );
   }
 
   @override
@@ -105,20 +159,7 @@ class _RewardScreenState extends State<RewardScreen> {
             ),
           ],
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _currentIndex, // Set the current index
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index; // Update the index when a tab is clicked
-            });
-          },
-          items: [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.card_giftcard), label: 'Reward'),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-          ],
-        ),
+        bottomNavigationBar: _buildBottomNavBar(), // Use the custom BottomNavigationBar
       ),
     );
   }
