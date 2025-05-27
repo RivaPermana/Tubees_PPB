@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cleanquest/screens/profile.dart';
 
 class EditProfileScreen extends StatelessWidget {
-  final int userId; // Tambah ini
+  final int userId;
 
   const EditProfileScreen({Key? key, required this.userId}) : super(key: key);
 
@@ -16,16 +16,22 @@ class EditProfileScreen extends StatelessWidget {
         TextEditingController(text: '081234123412');
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      extendBodyBehindAppBar: true,
+      backgroundColor: const Color.fromARGB(235, 255, 255, 255),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const ProfileScreen(userId: 12345,)),
+                MaterialPageRoute(
+                    builder: (context) => const ProfileScreen(userId: 12345)),
               );
             },
             child: const Text('Save', style: TextStyle(color: Colors.black)),
@@ -34,64 +40,54 @@ class EditProfileScreen extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          // Background + Tombol
-          Container(
+          // ➤ Gambar background
+          SizedBox(
             height: 250,
-            color: Colors.white,
-            child: Stack(
-              children: [
-                // Lingkaran dekorasi
-                Positioned(
-                  top: 0,
-                  left: -50,
-                  child: Container(
-                    width: 200,
-                    height: 200,
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.1),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
-                // Avatar di tengah
-                Align(
-                  alignment: Alignment.center,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      // Bulatan hitam sebagai placeholder foto profile
-                      const CircleAvatar(
-                        radius: 50,
-                        backgroundColor: Colors.black, // Bulatan hitam
-                      ),
-                      // Bulatan putih untuk membuat efek frame
-                      const CircleAvatar(
-                        radius: 46,
-                        backgroundColor: Colors.white,
-                      ),
-                      // Tombol kamera
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: CircleAvatar(
-                          radius: 15,
-                          backgroundColor: const Color.fromRGBO(76, 175, 80, 1),
-                          child: const Icon(Icons.camera_alt, size: 15, color: Colors.white),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+            width: double.infinity,
+            child: Image.asset(
+              'assets/images/background.png',
+              fit: BoxFit.cover,
             ),
           ),
 
-          // Form di bawah
+          // ➤ Avatar profile
+          Positioned(
+            top: 120,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  const CircleAvatar(
+                    radius: 50,
+                    backgroundColor: Colors.black,
+                  ),
+                  const CircleAvatar(
+                    radius: 46,
+                    backgroundColor: Colors.white,
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: CircleAvatar(
+                      radius: 15,
+                      backgroundColor: const Color.fromRGBO(85, 132, 122, 0.97),
+                      child: const Icon(Icons.camera_alt,
+                          size: 15, color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // ➤ Form
           Container(
-            margin: const EdgeInsets.only(top: 200),
-            padding: const EdgeInsets.all(20),
+            margin: const EdgeInsets.only(top: 350), // ➤ Digeser lebih ke bawah
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
             decoration: const BoxDecoration(
-              color: Color(0xFF5D8773), // Warna hijau dari contoh
+              color: const Color.fromRGBO(85, 132, 122, 0.97),
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(30),
                 topRight: Radius.circular(30),
@@ -128,10 +124,7 @@ class EditProfileScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: const TextStyle(color: Colors.white),
-        ),
+        Text(label, style: const TextStyle(color: Colors.white)),
         const SizedBox(height: 5),
         TextField(
           controller: controller,
