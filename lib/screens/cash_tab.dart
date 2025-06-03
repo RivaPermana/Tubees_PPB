@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cleanquest/services/api_service.dart';
 
 class CashTab extends StatefulWidget {
   final TextEditingController customAmountController;
@@ -14,7 +13,7 @@ class _CashTabState extends State<CashTab> {
   String? selectedPaymentMethod;
   String? _selectedNominal;
   int _requiredPoints = 0;
-  final String email = "test@gmail.com";  // Email default yang digunakan
+  final String email = "test@gmail.com"; // Email default (dummy)
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +39,7 @@ class _CashTabState extends State<CashTab> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Divider(
-              thickness: 1,
-              color: const Color.fromARGB(255, 0, 0, 0),
-            ),
+            Divider(thickness: 1, color: Colors.black),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 1.0),
               child: Column(
@@ -51,10 +47,7 @@ class _CashTabState extends State<CashTab> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Total Penukaran',
-                        style: TextStyle(fontSize: 16),
-                      ),
+                      Text('Total Penukaran', style: TextStyle(fontSize: 16)),
                       Row(
                         children: [
                           Icon(Icons.star, color: Colors.amber),
@@ -89,10 +82,7 @@ class _CashTabState extends State<CashTab> {
                           padding: const EdgeInsets.symmetric(
                               vertical: 12, horizontal: 24),
                         ),
-                        child: Text(
-                          'Tukar',
-                          style: TextStyle(color: Colors.white),
-                        ),
+                        child: Text('Tukar', style: TextStyle(color: Colors.white)),
                       ),
                     ],
                   ),
@@ -131,63 +121,61 @@ class _CashTabState extends State<CashTab> {
   }
 
   void showRewardDialog(BuildContext context) {
-  final TextEditingController phoneController = TextEditingController();
-  final rewardService = ApiService();
+    final TextEditingController phoneController = TextEditingController();
 
-  showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: Text('Masukkan Informasi'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: phoneController,
-              decoration: InputDecoration(labelText: 'Nomor Telepon'),
-              keyboardType: TextInputType.phone,
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Masukkan Informasi'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: phoneController,
+                decoration: InputDecoration(labelText: 'Nomor Telepon'),
+                keyboardType: TextInputType.phone,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Batal'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                String phone = phoneController.text;
+                int? balance = int.tryParse(widget.customAmountController.text);
+
+                if (phone.isNotEmpty && RegExp(r'^\d+$').hasMatch(phone) && balance != null && balance >= 5000) {
+                  // Dummy success logic
+                  bool success = true;
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(success
+                          ? 'Berhasil menyimpan data!'
+                          : 'Gagal menyimpan data!'),
+                    ),
+                  );
+                  if (success) Navigator.pop(context);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                          'Pastikan semua informasi valid dan nominal minimal Rp 5000'),
+                    ),
+                  );
+                }
+              },
+              child: Text('Kirim'),
             ),
           ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('Batal'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              String phone = phoneController.text;
-              int? balance = int.tryParse(widget.customAmountController.text);
-
-              if (phone.isNotEmpty && balance != null && balance >= 5000) {
-                bool success = await rewardService.submitReward(
-                  phone: phone,
-                  email: email,  // Email tetap
-                  balance: balance,
-                );
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(success ? 'Berhasil menyimpan data!' : 'Gagal menyimpan data!'),
-                  ),
-                );
-                if (success) Navigator.pop(context);
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Pastikan semua informasi valid dan nominal minimal Rp 5000'),
-                  ),
-                );
-              }
-            },
-            child: Text('Kirim'),
-          ),
-        ],
-      );
-    },
-  );
-}
-
+        );
+      },
+    );
+  }
 
   Widget _buildPaymentOption(String assetPath, String title) {
     bool isSelected = selectedPaymentMethod == title;
