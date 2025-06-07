@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'edit_profile.dart';
 import 'home_page.dart';
 import 'reward.dart';
+import 'riwayat_misi.dart';
 
 class ProfileScreen extends StatefulWidget {
   final int userId;
@@ -124,7 +125,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     _infoCard(
-                        title: ' Total Poin', value: '10.000 Poin', showStar: true),
+                        title: ' Total Poin',
+                        value: '10.000 Poin',
+                        showStar: true),
                     const SizedBox(width: 16),
                     _infoCard(
                         title: 'Misi', value: '1/2 Misi', showStar: false),
@@ -139,9 +142,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       borderRadius: BorderRadius.circular(12)),
                   child: Column(
                     children: [
-                      const ListTile(
-                        leading: Icon(Icons.assignment),
-                        title: Text('Riwayat Misi'),
+                      ListTile(
+                        leading: const Icon(Icons.assignment),
+                        title: const Text('Riwayat Misi'),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const RiwayatMisiScreen()),
+                          );
+                        },
                       ),
                       const Divider(),
                       ListTile(
