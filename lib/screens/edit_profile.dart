@@ -101,7 +101,7 @@ class EditProfileScreen extends StatelessWidget {
                 const SizedBox(height: 10),
                 _buildTextField(
                   label: 'Tanggal Lahir',
-                  hintText: 'Tidak bisa diubah',
+                  hintText: '07/06/2003',
                   enabled: false,
                 ),
               ],
